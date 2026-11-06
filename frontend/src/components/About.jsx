@@ -19,8 +19,8 @@ export default function About() {
               <span>Established</span>
             </div>
             <div className="stat">
-              <strong>06+</strong>
-              <span>Service capabilities</span>
+              <strong>04</strong>
+              <span>Core service capabilities</span>
             </div>
             <div className="stat">
               <strong>01</strong>

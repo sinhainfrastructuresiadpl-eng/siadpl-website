@@ -4,7 +4,7 @@ export default function Header({ menuOpen, setMenuOpen, nav }) {
   return (
     <header>
       <div className="wrap nav">
-        <a className="brand" href="#home">
+        <a className="brand" href="#home" onClick={nav}>
           <span className="mark">S/I</span>
           <span>SIADPL</span>
         </a>

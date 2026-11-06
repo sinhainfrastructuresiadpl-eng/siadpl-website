@@ -9,7 +9,7 @@ export default function Reveal({ children }) {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           setIsVisible(true)
-          observer.unobserve(domRef.current)
+          if (domRef.current) observer.unobserve(domRef.current)
         }
       })
     })

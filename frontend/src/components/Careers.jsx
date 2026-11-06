@@ -10,7 +10,9 @@ export default function Careers() {
           <p className="copy">
             We are always interested in dependable people across engineering, operations, skilled trades and project support. Send us a short introduction and your CV.
           </p>
-          <a className="button" href="mailto:sinhainfrastructure.siadpl@gmail.com?subject=Career%20Application%20-%20SIADPL">Apply by email ↗</a>
+          <p className="copy" style={{ margin: 0 }}>
+    Write to <a href="mailto:sinhainfrastructure.siadpl@gmail.com" style={{ textDecoration: 'underline' }}>sinhainfrastructure.siadpl@gmail.com</a>.
+  </p>
         </div>
       </div>
     </section>
