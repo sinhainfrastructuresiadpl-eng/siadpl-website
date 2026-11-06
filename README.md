@@ -161,3 +161,16 @@ GOOGLE_SHEETS_CREDENTIALS_PATH=C:\secrets\siadpl-sheets-key.json
 `GOOGLE_SHEETS_SPREADSHEET_ID` is the long ID in the Google Sheets URL between `/d/` and `/edit`.
 
 If these variables are not configured, the API still saves enquiries to PostgreSQL and only reports that Google Sheets sync is not configured.
+
+## Admin enquiries dashboard
+
+The frontend includes an admin view at `/admin` (`/#admin` also works).
+
+Backend environment variables:
+
+```text
+ADMIN_EMAIL=sinhainfrastructure.siadpl@gmail.com
+ADMIN_PASSWORD=your_admin_password
+```
+
+If `ADMIN_PASSWORD` is not set, the admin endpoint is disabled. Keep this password out of source control.

@@ -1,7 +1,11 @@
 package com.siadpl.enquiry;
 
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
@@ -13,11 +17,14 @@ public class EnquiryController {
   private final EnquiryRepository repository;
   private final EnquiryEmailService emailService;
   private final GoogleSheetsService sheetsService;
+  private final String exportKey;
 
-  public EnquiryController(EnquiryRepository repository, EnquiryEmailService emailService, GoogleSheetsService sheetsService) {
+  public EnquiryController(EnquiryRepository repository, EnquiryEmailService emailService, GoogleSheetsService sheetsService,
+                          @Value("${app.enquiry.export-key:}") String exportKey) {
     this.repository = repository;
     this.emailService = emailService;
     this.sheetsService = sheetsService;
+    this.exportKey = exportKey;
   }
 
   @PostMapping
@@ -39,5 +46,37 @@ public class EnquiryController {
       note += " Enquiry appended to Google Sheets.";
     }
     return Map.of("message", "Enquiry received", "detail", note, "id", saved.getId(), "receivedAt", Instant.now().toString());
+  }
+
+  @GetMapping("/export")
+  public ResponseEntity<String> export(@RequestHeader(value = "X-Export-Key", required = false) String suppliedKey) {
+    if (exportKey != null && !exportKey.isBlank() && !exportKey.equals(suppliedKey)) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+    }
+
+    StringBuilder csv = new StringBuilder();
+    csv.append("id,createdAt,name,email,phone,subject,message\n");
+    for (Enquiry enquiry : repository.findAll()) {
+      csv.append(enquiry.getId()).append(',')
+          .append(csvValue(enquiry.getCreatedAt() == null ? "" : enquiry.getCreatedAt().toString())).append(',')
+          .append(csvValue(enquiry.getName())).append(',')
+          .append(csvValue(enquiry.getEmail())).append(',')
+          .append(csvValue(enquiry.getPhone())).append(',')
+          .append(csvValue(enquiry.getSubject())).append(',')
+          .append(csvValue(enquiry.getMessage())).append('\n');
+    }
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.parseMediaType("text/csv; charset=UTF-8"));
+    headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"enquiries.csv\"");
+    return ResponseEntity.ok().headers(headers).body(csv.toString());
+  }
+
+  private static String csvValue(String value) {
+    if (value == null) {
+      return "\"\"";
+    }
+    String escaped = value.replace("\"", "\"\"");
+    return "\"" + escaped.replace("\n", " ").replace("\r", " ") + "\"";
   }
 }

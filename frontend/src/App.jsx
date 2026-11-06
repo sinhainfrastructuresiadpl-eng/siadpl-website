@@ -9,10 +9,16 @@ import Contact from './components/Contact'
 import Footer from './components/Footer'
 import Reveal from './components/Reveal'
 import BackToTop from './components/BackToTop'
+import Admin from './components/Admin'
 
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const nav = () => setMenuOpen(false)
+
+  const isAdmin = window.location.pathname.toLowerCase().includes('/admin') || window.location.hash.toLowerCase().includes('admin')
+  if (isAdmin) {
+    return <Admin />
+  }
 
   return (
     <>
