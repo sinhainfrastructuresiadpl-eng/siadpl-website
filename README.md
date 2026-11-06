@@ -137,31 +137,6 @@ mvn spring-boot:run
 
 For production, keep using standard port `5432` and a managed PostgreSQL provider, with `JPA_DDL_AUTO=validate` once the schema is stable.
 ```
-## Google Sheets sync (optional)
-
-The backend can append every enquiry to a Google Sheet.
-
-### 1. Create a Google Cloud service account
-1. Create or select a Google Cloud project.
-2. Enable the **Google Sheets API**.
-3. Create a **Service Account**.
-4. Create a **JSON key** for that service account and save it somewhere safe, for example `C:\secrets\siadpl-sheets-key.json`.
-5. Create a Google Sheet with a tab named `Enquiries`.
-6. Add a header row such as: `Timestamp`, `Name`, `Email`, `Phone`, `Subject`, `Message`.
-7. Share the spreadsheet with the service account email (the `client_email` value from the JSON key) with Editor access.
-
-### 2. Configure backend environment variables
-```text
-GOOGLE_SHEETS_ENABLED=true
-GOOGLE_SHEETS_SPREADSHEET_ID=your_spreadsheet_id
-GOOGLE_SHEETS_SHEET_NAME=Enquiries
-GOOGLE_SHEETS_CREDENTIALS_PATH=C:\secrets\siadpl-sheets-key.json
-```
-
-`GOOGLE_SHEETS_SPREADSHEET_ID` is the long ID in the Google Sheets URL between `/d/` and `/edit`.
-
-If these variables are not configured, the API still saves enquiries to PostgreSQL and only reports that Google Sheets sync is not configured.
-
 ## Admin enquiries dashboard
 
 The frontend includes an admin view at `/admin` (`/#admin` also works).

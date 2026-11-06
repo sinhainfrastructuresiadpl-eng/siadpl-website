@@ -16,14 +16,12 @@ import java.util.Map;
 public class EnquiryController {
   private final EnquiryRepository repository;
   private final EnquiryEmailService emailService;
-  private final GoogleSheetsService sheetsService;
   private final String exportKey;
 
-  public EnquiryController(EnquiryRepository repository, EnquiryEmailService emailService, GoogleSheetsService sheetsService,
+  public EnquiryController(EnquiryRepository repository, EnquiryEmailService emailService,
                           @Value("${app.enquiry.export-key:}") String exportKey) {
     this.repository = repository;
     this.emailService = emailService;
-    this.sheetsService = sheetsService;
     this.exportKey = exportKey;
   }
 
@@ -38,13 +36,9 @@ public class EnquiryController {
         enquiry.message()));
     System.out.printf("New enquiry #%d from %s <%s>: %s%n", saved.getId(), enquiry.name(), enquiry.email(), enquiry.subject());
     emailService.sendEnquiryNotification(enquiry);
-    sheetsService.appendEnquiry(enquiry);
     String note = emailService.isConfigured()
         ? "Enquiry saved and notification email sent."
         : "Enquiry saved. Email notification is not configured.";
-    if (sheetsService.isConfigured()) {
-      note += " Enquiry appended to Google Sheets.";
-    }
     return Map.of("message", "Enquiry received", "detail", note, "id", saved.getId(), "receivedAt", Instant.now().toString());
   }
 
