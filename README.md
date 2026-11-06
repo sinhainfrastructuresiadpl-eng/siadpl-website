@@ -34,33 +34,6 @@ Backend (your server):
 - Configure persistence/email before exposing the form publicly; enquiries are currently logged for review.
 
 ## Notes
-## Email provider setup (recommended)
-
-The backend can send each enquiry to your company inbox. If no email settings are configured, it still logs enquiries and reports that email is not configured.
-
-Choose an SMTP provider such as SendGrid, Mailgun, Amazon SES, Resend, or your hosting provider.
-
-Set these backend environment variables:
-
-```text
-ENQUIRY_RECIPIENT=sinhainfrastructure.siadpl@gmail.com
-MAIL_HOST=smtp.provider.com
-MAIL_PORT=587
-MAIL_USERNAME=your_smtp_username
-MAIL_PASSWORD=your_smtp_password
-MAIL_SMTP_AUTH=true
-MAIL_STARTTLS=true
-MAIL_STARTTLS_REQUIRED=true
-```
-
-What happens:
-1. Visitor submits the form.
-2. Backend validates the data.
-3. Backend logs the enquiry.
-4. If SMTP is configured, backend sends an email to `ENQUIRY_RECIPIENT` with reply-to set to the visitor's email.
-
-For better deliverability, verify your sender/domain with the provider and configure SPF, DKIM, and DMARC DNS records.
-
 ## PostgreSQL setup
 
 The backend now stores enquiries in PostgreSQL.

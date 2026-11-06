@@ -15,13 +15,11 @@ import java.util.Map;
 @RequestMapping("/api/enquiries")
 public class EnquiryController {
   private final EnquiryRepository repository;
-  private final EnquiryEmailService emailService;
   private final String exportKey;
 
-  public EnquiryController(EnquiryRepository repository, EnquiryEmailService emailService,
+  public EnquiryController(EnquiryRepository repository,
                           @Value("${app.enquiry.export-key:}") String exportKey) {
     this.repository = repository;
-    this.emailService = emailService;
     this.exportKey = exportKey;
   }
 
@@ -35,11 +33,7 @@ public class EnquiryController {
         enquiry.subject(),
         enquiry.message()));
     System.out.printf("New enquiry #%d from %s <%s>: %s%n", saved.getId(), enquiry.name(), enquiry.email(), enquiry.subject());
-    emailService.sendEnquiryNotification(enquiry);
-    String note = emailService.isConfigured()
-        ? "Enquiry saved and notification email sent."
-        : "Enquiry saved. Email notification is not configured.";
-    return Map.of("message", "Enquiry received", "detail", note, "id", saved.getId(), "receivedAt", Instant.now().toString());
+    return Map.of("message", "Enquiry received", "detail", "Enquiry saved.", "id", saved.getId(), "receivedAt", Instant.now().toString());
   }
 
   @GetMapping("/export")
