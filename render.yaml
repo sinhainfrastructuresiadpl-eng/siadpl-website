@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: siadpl-api
+    runtime: java
+    plan: free
+    rootDir: backend
+    buildCommand: mvn clean package -DskipTests
+    startCommand: java -jar target/siadpl-api-0.0.1-SNAPSHOT.jar
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: APP_CORS_ALLOWED_ORIGINS
+        value: https://siadpl.com,https://www.siadpl.com
+      - key: JPA_DDL_AUTO
+        value: update
+      # Set these in the Render dashboard instead of committing them:
+      - key: DB_URL
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: ADMIN_EMAIL
+        value: sinhainfrastructure.siadpl@gmail.com
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: APP_ENQUIRY_EXPORT_KEY
+        sync: false

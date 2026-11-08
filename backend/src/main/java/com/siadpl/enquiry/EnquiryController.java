@@ -32,13 +32,13 @@ public class EnquiryController {
         enquiry.phone(),
         enquiry.subject(),
         enquiry.message()));
-    System.out.printf("New enquiry #%d from %s <%s>: %s%n", saved.getId(), enquiry.name(), enquiry.email(), enquiry.subject());
+    System.out.printf("New enquiry #%d received%n", saved.getId());
     return Map.of("message", "Enquiry received", "detail", "Enquiry saved.", "id", saved.getId(), "receivedAt", Instant.now().toString());
   }
 
   @GetMapping("/export")
   public ResponseEntity<String> export(@RequestHeader(value = "X-Export-Key", required = false) String suppliedKey) {
-    if (exportKey != null && !exportKey.isBlank() && !exportKey.equals(suppliedKey)) {
+    if (exportKey == null || exportKey.isBlank() || !exportKey.equals(suppliedKey)) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
     }
 

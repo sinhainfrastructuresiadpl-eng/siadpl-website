@@ -40,6 +40,9 @@ public class AdminEnquiryController {
   }
 
   private boolean isAuthorized(String authorization) {
+    if (adminPassword == null || adminPassword.isBlank()) {
+      return false;
+    }
     if (authorization == null || !authorization.startsWith("Basic ")) {
       return false;
     }
